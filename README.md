@@ -17,11 +17,11 @@ We used the Twitter dataset `tweets.csv`. The solution works for any `.csv` data
 </p>
 
 As we can see we used one initializer task, 3 mapper tasks and one reducer task. The data was shared between different tasks using cross-communications (XComs). The declaration of the dag is in 
-[`mapred.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/master/mapred.py) where all the tasks and their dependencies are defined. The files 
-[`init_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/master/init_operator.py), 
-[`map_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/master/map_operator.py), and 
-[`red_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/master/red_operator.py) contain the implementation of each task (Initializer, Mapper, Reducer respectively). The output of the workflow is stored in 
-[`output.json`](https://github.com/hasankhadra/Provectus-Airflow/blob/master/output.json).
+[`mapred.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/dev_1/mapred.py) where all the tasks and their dependencies are defined. The files 
+[`init_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/dev_1/init_operator.py), 
+[`map_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/dev_1/map_operator.py), and 
+[`red_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/dev_1/red_operator.py) contain the implementation of each task (Initializer, Mapper, Reducer respectively). The output of the workflow is stored in 
+[`output.json`](https://github.com/hasankhadra/Provectus-Airflow/blob/dev_1/output.json).
 
 <a name="install"></a>
 ### 2. Installation and Running
