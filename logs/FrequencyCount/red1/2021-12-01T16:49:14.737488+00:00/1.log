@@ -1,0 +1,21 @@
+[2021-12-01 16:49:19,043] {taskinstance.py:1035} INFO - Dependencies all met for <TaskInstance: FrequencyCount.red1 manual__2021-12-01T16:49:14.737488+00:00 [queued]>
+[2021-12-01 16:49:19,053] {taskinstance.py:1035} INFO - Dependencies all met for <TaskInstance: FrequencyCount.red1 manual__2021-12-01T16:49:14.737488+00:00 [queued]>
+[2021-12-01 16:49:19,053] {taskinstance.py:1241} INFO - 
+--------------------------------------------------------------------------------
+[2021-12-01 16:49:19,053] {taskinstance.py:1242} INFO - Starting attempt 1 of 2
+[2021-12-01 16:49:19,053] {taskinstance.py:1243} INFO - 
+--------------------------------------------------------------------------------
+[2021-12-01 16:49:19,063] {taskinstance.py:1262} INFO - Executing <Task(RedOperator): red1> on 2021-12-01 16:49:14.737488+00:00
+[2021-12-01 16:49:19,068] {standard_task_runner.py:52} INFO - Started process 168 to run task
+[2021-12-01 16:49:19,070] {standard_task_runner.py:76} INFO - Running: ['***', 'tasks', 'run', 'FrequencyCount', 'red1', 'manual__2021-12-01T16:49:14.737488+00:00', '--job-id', '75', '--raw', '--subdir', 'DAGS_FOLDER/mapred.py', '--cfg-path', '/tmp/tmpslm0_4hc', '--error-file', '/tmp/tmp9tci35db']
+[2021-12-01 16:49:19,070] {standard_task_runner.py:77} INFO - Job 75: Subtask red1
+[2021-12-01 16:49:19,100] {logging_mixin.py:109} INFO - Running <TaskInstance: FrequencyCount.red1 manual__2021-12-01T16:49:14.737488+00:00 [running]> on host 1da30e33d42e
+[2021-12-01 16:49:19,146] {taskinstance.py:1429} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_OWNER=***
+AIRFLOW_CTX_DAG_ID=FrequencyCount
+AIRFLOW_CTX_TASK_ID=red1
+AIRFLOW_CTX_EXECUTION_DATE=2021-12-01T16:49:14.737488+00:00
+AIRFLOW_CTX_DAG_RUN_ID=manual__2021-12-01T16:49:14.737488+00:00
+[2021-12-01 16:49:19,449] {taskinstance.py:1280} INFO - Marking task as SUCCESS. dag_id=FrequencyCount, task_id=red1, execution_date=20211201T164914, start_date=20211201T164919, end_date=20211201T164919
+[2021-12-01 16:49:19,483] {local_task_job.py:154} INFO - Task exited with return code 0
+[2021-12-01 16:49:19,510] {local_task_job.py:264} INFO - 0 downstream tasks scheduled from follow-on schedule check

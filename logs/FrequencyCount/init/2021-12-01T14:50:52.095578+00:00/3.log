@@ -1,0 +1,22 @@
+[2021-12-01 15:01:35,728] {taskinstance.py:1035} INFO - Dependencies all met for <TaskInstance: FrequencyCount.init manual__2021-12-01T14:50:52.095578+00:00 [queued]>
+[2021-12-01 15:01:35,738] {taskinstance.py:1035} INFO - Dependencies all met for <TaskInstance: FrequencyCount.init manual__2021-12-01T14:50:52.095578+00:00 [queued]>
+[2021-12-01 15:01:35,738] {taskinstance.py:1241} INFO - 
+--------------------------------------------------------------------------------
+[2021-12-01 15:01:35,738] {taskinstance.py:1242} INFO - Starting attempt 3 of 4
+[2021-12-01 15:01:35,738] {taskinstance.py:1243} INFO - 
+--------------------------------------------------------------------------------
+[2021-12-01 15:01:35,749] {taskinstance.py:1262} INFO - Executing <Task(InitOperator): init> on 2021-12-01 14:50:52.095578+00:00
+[2021-12-01 15:01:35,753] {standard_task_runner.py:52} INFO - Started process 149 to run task
+[2021-12-01 15:01:35,756] {standard_task_runner.py:76} INFO - Running: ['***', 'tasks', 'run', 'FrequencyCount', 'init', 'manual__2021-12-01T14:50:52.095578+00:00', '--job-id', '50', '--raw', '--subdir', 'DAGS_FOLDER/mapred.py', '--cfg-path', '/tmp/tmpq2ljhmzl', '--error-file', '/tmp/tmp75w617lu']
+[2021-12-01 15:01:35,756] {standard_task_runner.py:77} INFO - Job 50: Subtask init
+[2021-12-01 15:01:35,791] {logging_mixin.py:109} INFO - Running <TaskInstance: FrequencyCount.init manual__2021-12-01T14:50:52.095578+00:00 [running]> on host d1ea91dc5f74
+[2021-12-01 15:01:35,836] {taskinstance.py:1429} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_OWNER=***
+AIRFLOW_CTX_DAG_ID=FrequencyCount
+AIRFLOW_CTX_TASK_ID=init
+AIRFLOW_CTX_EXECUTION_DATE=2021-12-01T14:50:52.095578+00:00
+AIRFLOW_CTX_DAG_RUN_ID=manual__2021-12-01T14:50:52.095578+00:00
+[2021-12-01 15:01:35,847] {logging_mixin.py:109} INFO - Directory b'***-worker.pid\n***.cfg\ndags\nlogs\nplugins\nwebserver_config.py\n'
+[2021-12-01 15:01:37,601] {taskinstance.py:1280} INFO - Marking task as SUCCESS. dag_id=FrequencyCount, task_id=init, execution_date=20211201T145052, start_date=20211201T150135, end_date=20211201T150137
+[2021-12-01 15:01:37,653] {local_task_job.py:154} INFO - Task exited with return code 0
+[2021-12-01 15:01:37,716] {local_task_job.py:264} INFO - 0 downstream tasks scheduled from follow-on schedule check

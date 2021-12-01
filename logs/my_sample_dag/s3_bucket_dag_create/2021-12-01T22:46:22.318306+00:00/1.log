@@ -1,0 +1,81 @@
+[2021-12-01 22:46:23,291] {taskinstance.py:1035} INFO - Dependencies all met for <TaskInstance: my_sample_dag.s3_bucket_dag_create manual__2021-12-01T22:46:22.318306+00:00 [queued]>
+[2021-12-01 22:46:23,302] {taskinstance.py:1035} INFO - Dependencies all met for <TaskInstance: my_sample_dag.s3_bucket_dag_create manual__2021-12-01T22:46:22.318306+00:00 [queued]>
+[2021-12-01 22:46:23,302] {taskinstance.py:1241} INFO - 
+--------------------------------------------------------------------------------
+[2021-12-01 22:46:23,302] {taskinstance.py:1242} INFO - Starting attempt 1 of 1
+[2021-12-01 22:46:23,302] {taskinstance.py:1243} INFO - 
+--------------------------------------------------------------------------------
+[2021-12-01 22:46:23,313] {taskinstance.py:1262} INFO - Executing <Task(S3CreateBucketOperator): s3_bucket_dag_create> on 2021-12-01 22:46:22.318306+00:00
+[2021-12-01 22:46:23,319] {standard_task_runner.py:52} INFO - Started process 97 to run task
+[2021-12-01 22:46:23,320] {standard_task_runner.py:76} INFO - Running: ['***', 'tasks', 'run', 'my_sample_dag', 's3_bucket_dag_create', 'manual__2021-12-01T22:46:22.318306+00:00', '--job-id', '99', '--raw', '--subdir', 'DAGS_FOLDER/test_dag.py', '--cfg-path', '/tmp/tmp6qf5d24q', '--error-file', '/tmp/tmpzfjjn9p6']
+[2021-12-01 22:46:23,321] {standard_task_runner.py:77} INFO - Job 99: Subtask s3_bucket_dag_create
+[2021-12-01 22:46:23,352] {logging_mixin.py:109} INFO - Running <TaskInstance: my_sample_dag.s3_bucket_dag_create manual__2021-12-01T22:46:22.318306+00:00 [running]> on host 0e2226f6aeab
+[2021-12-01 22:46:23,392] {taskinstance.py:1429} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_OWNER=pipis
+AIRFLOW_CTX_DAG_ID=my_sample_dag
+AIRFLOW_CTX_TASK_ID=s3_bucket_dag_create
+AIRFLOW_CTX_EXECUTION_DATE=2021-12-01T22:46:22.318306+00:00
+AIRFLOW_CTX_DAG_RUN_ID=manual__2021-12-01T22:46:22.318306+00:00
+[2021-12-01 22:46:23,393] {base_aws.py:401} INFO - Airflow Connection: aws_conn_id=aws_default
+[2021-12-01 22:46:23,401] {base_aws.py:177} INFO - Credentials retrieved from login
+[2021-12-01 22:46:23,402] {base_aws.py:93} INFO - Creating session with aws_access_key_id=*** region_name=us-east-1
+[2021-12-01 22:46:23,415] {base_aws.py:168} INFO - role_arn is None
+[2021-12-01 22:46:23,416] {warnings.py:110} WARNING - /home/***/.local/lib/python3.7/site-packages/***/providers/amazon/aws/hooks/base_aws.py:494: DeprecationWarning: client_type is deprecated. Set client_type from class attribute.
+  return self.get_client_type(self.client_type, region_name=self.region_name)
+
+[2021-12-01 22:46:24,141] {s3.py:163} ERROR - Forbidden
+[2021-12-01 22:46:24,317] {taskinstance.py:1703} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/taskinstance.py", line 1332, in _run_raw_task
+    self._execute_task_with_callbacks(context)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/taskinstance.py", line 1458, in _execute_task_with_callbacks
+    result = self._execute_task(context, self.task)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/taskinstance.py", line 1514, in _execute_task
+    result = execute_callable(context=context)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/operators/s3_bucket.py", line 64, in execute
+    s3_hook.create_bucket(bucket_name=self.bucket_name, region_name=self.region_name)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/hooks/s3.py", line 62, in wrapper
+    return func(*bound_args.args, **bound_args.kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/hooks/s3.py", line 192, in create_bucket
+    self.get_conn().create_bucket(Bucket=bucket_name)
+  File "/home/airflow/.local/lib/python3.7/site-packages/botocore/client.py", line 388, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/botocore/client.py", line 708, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (InvalidAccessKeyId) when calling the CreateBucket operation: The AWS Access Key Id you provided does not exist in our records.
+[2021-12-01 22:46:24,329] {taskinstance.py:1280} INFO - Marking task as FAILED. dag_id=my_sample_dag, task_id=s3_bucket_dag_create, execution_date=20211201T224622, start_date=20211201T224623, end_date=20211201T224624
+[2021-12-01 22:46:24,340] {standard_task_runner.py:91} ERROR - Failed to execute job 99 for task s3_bucket_dag_create
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/task/task_runner/standard_task_runner.py", line 85, in _start_by_fork
+    args.func(args, dag=self.dag)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/cli/cli_parser.py", line 48, in command
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/utils/cli.py", line 92, in wrapper
+    return f(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/cli/commands/task_command.py", line 292, in task_run
+    _run_task_by_selected_method(args, dag, ti)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/cli/commands/task_command.py", line 107, in _run_task_by_selected_method
+    _run_raw_task(args, ti)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/cli/commands/task_command.py", line 184, in _run_raw_task
+    error_file=args.error_file,
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/utils/session.py", line 70, in wrapper
+    return func(*args, session=session, **kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/taskinstance.py", line 1332, in _run_raw_task
+    self._execute_task_with_callbacks(context)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/taskinstance.py", line 1458, in _execute_task_with_callbacks
+    result = self._execute_task(context, self.task)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/taskinstance.py", line 1514, in _execute_task
+    result = execute_callable(context=context)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/operators/s3_bucket.py", line 64, in execute
+    s3_hook.create_bucket(bucket_name=self.bucket_name, region_name=self.region_name)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/hooks/s3.py", line 62, in wrapper
+    return func(*bound_args.args, **bound_args.kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/hooks/s3.py", line 192, in create_bucket
+    self.get_conn().create_bucket(Bucket=bucket_name)
+  File "/home/airflow/.local/lib/python3.7/site-packages/botocore/client.py", line 388, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/botocore/client.py", line 708, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (InvalidAccessKeyId) when calling the CreateBucket operation: The AWS Access Key Id you provided does not exist in our records.
+[2021-12-01 22:46:24,376] {local_task_job.py:154} INFO - Task exited with return code 1
+[2021-12-01 22:46:24,407] {local_task_job.py:264} INFO - 0 downstream tasks scheduled from follow-on schedule check
