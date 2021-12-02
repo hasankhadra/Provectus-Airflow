@@ -90,18 +90,18 @@ with DAG(
     dictionary and then stores the results in the specified output json file.
     """)
 
-    # postgres_uploader = PostgresOperator(
-    #     task_id="postgres",
-    #     xcom_task_id="reducer",
-    #     pg_conn_id = "local_postgres",
-    #     batch_size = 1000
-    # )
+    postgres_uploader = PostgresOperator(
+        task_id="postgres",
+        xcom_task_id="reducer",
+        pg_conn_id = "local_postgres",
+        batch_size = 1000
+    )
     
     # These are the dependencies between the tasks inside this dag
     # We first run the initializer, then distribute the load among
     # the mapper tasks, and only after all the mappers finish,
     # the reducer take it from there and combine the results of
     # all the mappers
-    initializer >> [mapper1, mapper2, mapper3] >> reducer
+    initializer >> [mapper1, mapper2, mapper3] >> reducer >> postgres_uploader
     
     

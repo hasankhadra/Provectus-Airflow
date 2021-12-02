@@ -75,7 +75,7 @@ class InitMinioOperator(BaseOperator):
 
 
 """
-
+"airflow connections add 'local_minio' --conn-type 'S3' --conn-extra {"aws_access_key_id": "minio-access-key", "aws_secret_access_key": "minio-secret-key", "host": "http://minio:9000"} ; ", "airflow connections add 'local_postgres' --conn-host 'postgres' --conn-password 'airflow' --conn-login 'airflow' --conn-type 'Postgres' ; ", 
 airflow connections add 'local_minio' --conn-type 'S3' --conn-extra "{\"aws_access_key_id\": \"minio-access-key\", \"aws_secret_access_key\": \"minio-secret-key\", \"host\": \"http://minio:9000\"}"
 airflow connections add 'local_postgres' --conn-host 'postgres' --conn-password 'airflow' --conn-login 'airflow' --conn-type 'Postgres'
 

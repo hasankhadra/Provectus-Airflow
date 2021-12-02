@@ -6,10 +6,10 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 class PostgresOperator(BaseOperator):
     """
-    Combine the results of all the mapper tasks into one frequency
-    dictionary and store the results in the specified output json file.
+    Pull the results of the reducer task and upload them to postgres db.
+    Database name: airflow
+    Table name: frequency
     """
-  
     
     def __init__(self, xcom_task_id: str, pg_conn_id: str, batch_size: int, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -75,7 +75,7 @@ class PostgresOperator(BaseOperator):
         :param table_name: the table name
         """
         conn, crsr = self.init()
-        crsr.execute(f"DROP TABLE {table_name};")
+        crsr.execute(f"DROP TABLE IF EXISTS {table_name};")
         
         conn.commit()
         crsr.close()
@@ -95,13 +95,13 @@ class PostgresOperator(BaseOperator):
 
     def execute(self, context):
         """
-        Pull the results of each mapper task from xcom and combine 
-        them as one. Store the results in self.output_path.json
+        Pull the results of the reducer task from xcom and migrate them to postgres db. 
         """
         task_instance = context['task_instance']
+
         self._delete_table('frequency')
         self.create_table_frequency()
-        
+
         data = json.loads(task_instance.xcom_pull(task_ids=self.xcom_task_id, key="postgres_data"))
         
         list_data = []
