@@ -1,70 +1,51 @@
-# Task 1 - Mapreduce with Airflow
+# Task 2 - Airflow with Docker-compose
 
 _Provectus-Internship, 2021_
 
-In this project, we implemented MapReduce paradigm in Apache Aiflow to calculate the word count for a given dataset. 
+In this project, we implemented MapReduce paradigm in Apache Aiflow to calculate the word count for a given dataset. The input dataset is extracted from `minio`, and the results of the project are stored in `postgres` db. The whole app is dockerized through `docker-compose.yaml`
 
 ## Table of contents
-1. [ Structure of the code ](#struct)
+1. [ Description and Structure of the code ](#struct)
 2. [ Installation and Running ](#install)
 
 <a name="struct"></a>
-### 1. Structure of the code
-We used the Twitter dataset `tweets.csv`. The solution works for any `.csv` dataset. We used Custom operators for Initializer, Mapper and Reducer tasks. This is the graph of the dag we used: 
+### 1. Description and Structure of the code
+
+We used the Twitter dataset `tweets.csv`. The solution works for any `.csv` dataset. The data is first uploaded to minio from local file system. We used Custom operators for Minio initializer, Mapper and Reducer, and Postgres uplaoder tasks. This is the graph of the dag we used: 
 
 <p align="center">
-<img src="https://i.ibb.co/3mkqNMb/airflow.png" width="500" height="400"/>
+<img src="https://i.ibb.co/ZWZCKgB/airflow11.png" width="500" height="300"/>
 </p>
 
-As we can see we used one initializer task, 3 mapper tasks and one reducer task. The data was shared between different tasks using cross-communications (XComs). The declaration of the dag is in 
+As we can see we used one initializer task, 3 mapper tasks, one reducer task and a postgres task. The data was shared between different tasks using cross-communications (XComs). The declaration of the dag is in 
 [`mapred.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/master/mapred.py) where all the tasks and their dependencies are defined. The files 
 [`init_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/master/init_operator.py), 
-[`map_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/master/map_operator.py), and 
-[`red_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/master/red_operator.py) contain the implementation of each task (Initializer, Mapper, Reducer respectively). The output of the workflow is stored in 
-[`output.json`](https://github.com/hasankhadra/Provectus-Airflow/blob/master/output.json).
+[`map_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/master/map_operator.py),  
+[`red_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/master/red_operator.py), and
+[`postgres_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/dev_2/plugins/postgres_operator.py) contain the implementation of each task (Initializer, Mapper, Reducer, Postgres respectively).
 
 <a name="install"></a>
 ### 2. Installation and Running
-  1. First you need to install airflow. Follow the steps in this [tutorial](https://airflow.apache.org/docs/apache-airflow/stable/start/local.html).
+  1. Clone this repo to your local machine in the same directory you're at now.
+  2. `minio` and `pgadmin` require access to some data files inside docker. We made a bash script to make it easier. In the same terminal run:
 
-  2. `cd` to `AIRFLOW_HOME` (the same one you chose during step 1) and run the following commands:
-   
-  ```
-  mkdir dags
-  cd dags
-  ```
-    
-  3. Clone this repo to your local machine in the same directory you're at now.
-  4. Open 2 new terminals (Now you have 3 in total). In the first one run:
+```
+chmod u+x init.sh
+./init.sh
+```
 
-  ```
-  airflow scheduler
-  ```
+  3. Now to run the app, run:
+
+```
+docker-compose up airflow-init
+docker-compose up --build
+```
+
+  You can login through the link: http://localhost:8080/ through credentials: `username: airflow`, `password: airflow`. Search for the dag with name `WordCount` and track its process.
   
-  In order to track the execution of the dag, you can use the airflow webserver UI. First you need to create an admin user. In the second terminal run:
-  
-  ```
-  airflow users create \
-    --username test \
-    --firstname test \
-    --lastname test \
-    --role Admin \
-    --email test@test.test
-  ```
-  
-  You'll be prompted to insert a password, you'll use the same password when loging in to the webserver. 
-  
-  Now in the same terminal run the webserver:
-  
-  ```
-  airflow webserver
-  ```
-  
-  You can login through the link: http://localhost:8080/. Search for the dag with name `FrequencyCount` and track its process.
-  
-  5. Now, we're ready to run the dag. In the the 3rd terminal run:
+  5. If you want to run the process again without restarting the docker all over again, you can run the following command:
 
   ```
-  airflow dags backfill FrequencyCount --start-date 2015-06-01
+  docker-compose up airflow-run-dag
   ```
-After running the command, the file `output.json` will be overwritten (or created in case it wasn't created before) with the results of the dag. The file will be created in the same directory you are currently in.
+After running the command, the results of the MapReduce app will be stored in postgres db. You can log in to `pgadmin` at http://localhost:5050/. You need to create a new server with the following credentials: `server name: airflow`,`host: postgres`, `username: airflow`, `password: airflow`. Then you can check the table named `frequency` and its contents.
