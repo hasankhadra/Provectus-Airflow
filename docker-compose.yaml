@@ -70,8 +70,18 @@ x-airflow-common:
       condition: service_healthy
 
 services:
+  # map-reduce-task:
+  #   build: .
+  #   restart: always
+  #   # We used depends_on to make sure all other services are running before starting running this container
+  #   depends_on:
+  #     - postgres
+  #     - pgadmin
+  #     - minio
+  #     - minio-create-bucket
+    
   minio:
-    image: bitnami/minio:latest
+    image: bitnami/minio
     restart: always
     environment:
       - MINIO_ACCESS_KEY=minio-access-key

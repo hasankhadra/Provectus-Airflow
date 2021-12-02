@@ -1,12 +1,13 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 from textwrap import dedent
-from init_operator import InitOperator
+from init_operator import InitMinioOperator
 
 from airflow import DAG
 from airflow.utils.dates import days_ago
 
 from map_operator import MapOperator
 from red_operator import RedOperator
+from postgres_operator import PostgresOperator
 
 LOCAL_INPUT = "./tweets.csv"
 LOCAL_OUTPUT = "./output.json"
@@ -20,11 +21,11 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 with DAG(
-    'FrequencyCount',
+    'WordCount',
     default_args=default_args,
     description='MapReduce for frequency count',
     schedule_interval=timedelta(days=1),
-    start_date=days_ago(1),
+    start_date=datetime(2019, 10, 13, 15, 50),
     catchup=False
 ) as dag:
     
@@ -36,9 +37,10 @@ with DAG(
     - 1 reducer task
     """  
 
-    initializer = InitOperator(
-        task_id='init',
-        data_path=LOCAL_INPUT
+    initializer = InitMinioOperator(
+        task_id='init_minio',
+        data_path=DOCKER_INPUT,
+        minio_conn_id="local_minio"
     )
 
     initializer.doc_md = dedent("""
@@ -47,8 +49,8 @@ with DAG(
     """)
 
     mapper1 = MapOperator(
-        task_id='map1',
-        xcom_task_id = 'init'
+        task_id='mapper1',
+        xcom_task_id = 'init_minio'
     )
     
     mapper1.doc_md = dedent("""
@@ -58,8 +60,8 @@ with DAG(
     """)
 
     mapper2 = MapOperator(
-        task_id='map2',
-        xcom_task_id = 'init'
+        task_id='mapper2',
+        xcom_task_id = 'init_minio'
     )
     
     mapper2.doc_md = dedent("""
@@ -69,8 +71,8 @@ with DAG(
     """)
 
     mapper3 = MapOperator(
-        task_id='map3',
-        xcom_task_id = 'init'
+        task_id='mapper3',
+        xcom_task_id = 'init_minio'
     )
     
     mapper3.doc_md = dedent("""
@@ -80,15 +82,21 @@ with DAG(
     """)
     
     reducer = RedOperator(
-        task_id='red1',
-        xcom_task_ids=['map1', 'map2', 'map3'],
-        output_path=LOCAL_OUTPUT
+        task_id='reducer',
+        xcom_task_ids=['mapper1', 'mapper2', 'mapper3']
     )
     reducer.doc_md = dedent("""
     This task is responsible for combining the results of all the mapper tasks into one frequency
     dictionary and then stores the results in the specified output json file.
     """)
 
+    # postgres_uploader = PostgresOperator(
+    #     task_id="postgres",
+    #     xcom_task_id="reducer",
+    #     pg_conn_id = "local_postgres",
+    #     batch_size = 1000
+    # )
+    
     # These are the dependencies between the tasks inside this dag
     # We first run the initializer, then distribute the load among
     # the mapper tasks, and only after all the mappers finish,
