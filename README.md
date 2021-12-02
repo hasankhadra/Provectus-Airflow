@@ -1,4 +1,4 @@
-# Task 1 - Mapreduce with Airflow
+# Task 2 - Airflow with Docker-compose
 
 _Provectus-Internship, 2021_
 
