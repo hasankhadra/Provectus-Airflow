@@ -24,6 +24,8 @@ As we can see we used one initializer task, 3 mapper tasks, one reducer task and
 [`red_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/master/red_operator.py), and
 [`postgres_operator.py`](https://github.com/hasankhadra/Provectus-Airflow/blob/dev_2/plugins/postgres_operator.py) contain the implementation of each task (Initializer, Mapper, Reducer, Postgres respectively).
 
+Note that for every run of the dag, the input file on `minio` gets overwritten with the new local copy. The same goes for postgres db. For every run of the dag, the table `frequency` (which contains the results) gets cleared and refilled with the new results.
+
 <a name="install"></a>
 ### 2. Installation and Running
   1. Clone this repo to your local machine in the same directory you're at now.
@@ -31,7 +33,7 @@ As we can see we used one initializer task, 3 mapper tasks, one reducer task and
 
 ```
 chmod u+x init.sh
-./init.sh
+sudo ./init.sh
 ```
 
   3. Now to run the app, run:
@@ -41,7 +43,7 @@ docker-compose up airflow-init
 docker-compose up --build
 ```
 
-  You can login through the link: http://localhost:8080/ through credentials: `username: airflow`, `password: airflow`. Search for the dag with name `WordCount` and track its process.
+  You can login through the link: http://localhost:8080/ with the following credentials: `username: airflow`, `password: airflow`. Search for the dag with name `WordCount` and track its process.
   
   5. If you want to run the process again without restarting the docker all over again, you can run the following command:
 
