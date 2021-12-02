@@ -70,21 +70,14 @@ x-airflow-common:
       condition: service_healthy
 
 services:
-  map-reduce-task:
-    build: .
-    restart: always
-    ports:
-      - 5000:5000
+  airflow-hasan:
+    <<: *airflow-common
+    command: > 
+      bash -c "airflow connections add 'local_postgres' --conn-host 'postgres' --conn-password 'airflow' --conn-login 'airflow' --conn-type 'Postgres' ; airflow connections add 'local_minio' --conn-type 'S3' --conn-extra '{\"aws_access_key_id\": \"minio-access-key\", \"aws_secret_access_key\": \"minio-secret-key\", \"host\": \"http://minio:9000\"}' ; airflow dags trigger WordCount"
     depends_on:
-      - postgres
-      - pgadmin
-      - minio
-      - minio-create-bucket
-      - airflow-webserver
-      - airflow-scheduler
-      - airflow-worker
-      - airflow-init
-    
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
   minio:
     image: bitnami/minio
     restart: always
@@ -146,7 +139,9 @@ services:
 
   airflow-webserver:
     <<: *airflow-common
-    command: webserver
+    command: >
+      bash -c 'airflow webserver && airflow connections add "local_minio" --conn-type "S3" --conn-extra "{'aws_access_key_id': 'minio-access-key', 'aws_secret_access_key': 'minio-secret-key', 'host': 'http://minio:9000'}"
+      && airflow connections add "local_postgres" --conn-host "postgres" --conn-password "airflow" --conn-login "airflow" --conn-type "Postgres"'
     ports:
       - 8080:8080
     healthcheck:
@@ -162,7 +157,8 @@ services:
 
   airflow-scheduler:
     <<: *airflow-common
-    command: scheduler
+    command: >
+      bash -c 'airflow scheduler'
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
       interval: 10s
@@ -197,7 +193,8 @@ services:
 
   airflow-triggerer:
     <<: *airflow-common
-    command: triggerer
+    command: >
+      bash -c "airflow triggerer"
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
       interval: 10s
