@@ -3,9 +3,10 @@ from airflow.utils.dates import days_ago
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.amazon.aws.operators.s3_bucket import S3CreateBucketOperator
 from airflow.providers.amazon.aws.sensors.s3_key import S3KeySensor
+from airflow.hooks.S3_hook import S3Hook
 
 args = {
-    'owner': 'pipis',
+    'owner': 'airflow',
     'start_date': days_ago(1)
 }
  
@@ -18,13 +19,16 @@ def run_this_func():
 def run_also_this_func():
     print('I am coming last')
  
- 
+def write_text_file(ds, **kwargs):
+    
+    s3 = S3Hook('local_minio')
+    s3.create_bucket("my-bucket")
+
 with dag:
-    create_bucket = S3CreateBucketOperator(
-        task_id='s3_bucket_dag_create',
-        region_name='us-east-1',
-        bucket_name="test",
-        aws_conn_id="aws_default",
+
+    t1 = PythonOperator(
+        task_id='generate_and_upload_to_s3',
+        python_callable=write_text_file,
         dag=dag
     )
 
