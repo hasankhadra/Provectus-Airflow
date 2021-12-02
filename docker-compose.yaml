@@ -70,7 +70,7 @@ x-airflow-common:
       condition: service_healthy
 
 services:
-  airflow-hasan:
+  airflow-run-dag:
     <<: *airflow-common
     command: > 
       bash -c "airflow connections add 'local_postgres' --conn-host 'postgres' --conn-password 'airflow' --conn-login 'airflow' --conn-type 'Postgres' ; airflow connections add 'local_minio' --conn-type 'S3' --conn-extra '{\"aws_access_key_id\": \"minio-access-key\", \"aws_secret_access_key\": \"minio-secret-key\", \"host\": \"http://minio:9000\"}' ; airflow dags trigger WordCount"
